@@ -18,46 +18,46 @@
 extern "C" {
 #endif
 
-    extern void eprintf(char *fmt, ...);
+extern void eprintf(char *fmt, ...);
 
-    extern char *estrdup(char *s);
+extern char *estrdup(char *s);
 
-    extern char *progname();
+extern char *progname();
 
-    extern void setprogname(char *str);
+extern void setprogname(char *str);
 
-    extern void eprintf(char *fmt, ...);
+extern void eprintf(char *fmt, ...);
 
-    extern void *emalloc(size_t n);
+extern void *emalloc(size_t n);
 
-    typedef enum {
-        SizeUnitBytes = 0,
-        SizeUnitKBytes = 1,
-        SizeUnitMBytes = 2,
-        SizeUnitGBytes = 3,
-        SizeUnitTBytes = 4,
-        SizeUnitPBytes = 5,
-        SizeUnitEBytes = 6,
-        SizeUnitZBytes = 7,
-        SizeUnitYBytes = 8,
-        SizeUnitBBytes = 9,
-        SizeUnitGPBytes = 10
-    } SizeUnit;
+typedef enum {
+    SizeUnitBytes = 0,
+    SizeUnitKBytes = 1,
+    SizeUnitMBytes = 2,
+    SizeUnitGBytes = 3,
+    SizeUnitTBytes = 4,
+    SizeUnitPBytes = 5,
+    SizeUnitEBytes = 6,
+    SizeUnitZBytes = 7,
+    SizeUnitYBytes = 8,
+    SizeUnitBBytes = 9,
+    SizeUnitGPBytes = 10
+} SizeUnit;
 
-    typedef struct FileSize {
-        SizeUnit unit;
-        // Union of either size in bytes or size it KBytes, MBytes etc.
-        union {
-            double size;
-            unsigned long long sizeInBytes;
-        } value;
-    } FileSize;
+typedef struct FileSize {
+	SizeUnit unit;
+	// Union of either size in bytes or size it KBytes, MBytes etc.
+	union {
+		double size;
+		unsigned long long sizeInBytes;
+	} value;
+} FileSize;
 
-    extern FileSize NormalizeSize(unsigned long long size);
+extern FileSize NormalizeSize(unsigned long long size);
 
-	extern void StartTimer(void);
-    extern void StopTimer(void);
-    extern double ReadElapsedTime(void);
+extern void StartTimer(void);
+extern void StopTimer(void);
+extern double ReadElapsedTime(void);
 
 #ifdef __cplusplus
 }

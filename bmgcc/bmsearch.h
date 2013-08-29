@@ -16,20 +16,20 @@
 extern "C" {
 #endif
 
-    /*!
-     * Searches substring position in a text
-     */
-    extern int search(const wchar_t * pText, int textLength, int startPos, int patternLength, int *pOtherShifts);
+/*!
+ * Searches substring position in a text
+ */
+extern int search(const wchar_t * pText, int textLength, int startPos, int patternLength, int *pOtherShifts);
 
-    /*!
-     * Builds substring shift table
-     */
-    extern void build(const wchar_t * pattern, int patternLength, int *pOtherShifts);
+/*!
+ * Builds substring shift table
+ */
+extern void build(const wchar_t * pattern, int patternLength, int *pOtherShifts);
 
-    /*!
-     * Does necessary cleanup
-     */
-    extern void clean();
+/*!
+ * Does necessary cleanup
+ */
+extern void clean();
 
 #ifdef __cplusplus
 }

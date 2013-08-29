@@ -18,7 +18,7 @@ void SearchTest::SetUp()
 void SearchTest::TearDown()
 {
 	if (pOtherShifts != NULL && nPatternLength > 0) {
-	
+
 		delete [] pOtherShifts;
 	}
 	clean();
@@ -27,7 +27,7 @@ void SearchTest::TearDown()
 void SearchTest::SearchTester(const wchar_t* text, const wchar_t* pattern, int startPos, int expected)
 {
 	nPatternLength = wcslen(pattern);
-	
+
 	pOtherShifts = new int[nPatternLength];
 
 	build(pattern, nPatternLength, pOtherShifts);
@@ -35,31 +35,36 @@ void SearchTest::SearchTester(const wchar_t* text, const wchar_t* pattern, int s
 	EXPECT_EQ(expected, result);
 }
 
-TEST_F(SearchTest, SuccessRus) {
+TEST_F(SearchTest, SuccessRus)
+{
 	SearchTester(c_pStr, L"ñòðîêà", 0, 9);
 }
 
-TEST_F(SearchTest, FailRus) {
+TEST_F(SearchTest, FailRus)
+{
 	SearchTester(c_pStr, L"õðåí", 0, -1);
 }
 
-TEST_F(SearchTest, PatternIsTheSameAsText) {
+TEST_F(SearchTest, PatternIsTheSameAsText)
+{
 	SearchTester(c_pStr, c_pStr, 0, 0);
 }
 
-TEST_F(SearchTest, EmptyPattern) {
+TEST_F(SearchTest, EmptyPattern)
+{
 	SearchTester(c_pStr, L"", 0, 0);
 }
 
-TEST_F(SearchTest, TwoMatches) {
+TEST_F(SearchTest, TwoMatches)
+{
 	int nPatternLength = 0;
 	int* pOther = NULL;
 	int r = -1;
 
 	const wchar_t* pattern = L"ñò";
-	
+
 	nPatternLength = wcslen(pattern);
-	
+
 	pOther = new int[nPatternLength];
 
 	build(pattern, nPatternLength, pOther);
@@ -69,7 +74,7 @@ TEST_F(SearchTest, TwoMatches) {
 	EXPECT_EQ(9, r);
 
 	if (pOther != NULL) {
-	
+
 		delete [] pOther;
 	}
 }

@@ -4,7 +4,8 @@
 
 #include "SearchTest.h"
 
-int main(int argc, char **argv) {
+int main(int argc, char **argv)
+{
 	testing::InitGoogleTest(&argc, argv);
 	// Print tests time
 	testing::GTEST_FLAG(print_time) = true;
