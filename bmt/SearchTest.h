@@ -14,7 +14,8 @@ class SearchTest : public testing::Test
 		void SearchTester(const wchar_t*, const wchar_t*, int startPos, int);
 
 	private:
+		int* pOtherShifts;
 		int nPatternLength;
 		int result;
-		int* pOtherShifts;
+
 };
