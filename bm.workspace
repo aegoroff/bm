@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CodeLite_Workspace Name="bm" Database="./bm.tags">
-  <Project Name="bmgcc" Path="bmgcc/bmgcc.project" Active="Yes"/>
-  <Project Name="bmt" Path="bmt/bmt.project"/>
+  <Project Name="bmgcc" Path="bmgcc/bmgcc.project" Active="No"/>
+  <Project Name="bmt" Path="bmt/bmt.project" Active="Yes"/>
   <BuildMatrix>
-    <WorkspaceConfiguration Name="Debug" Selected="no">
+    <WorkspaceConfiguration Name="Debug" Selected="yes">
       <Project Name="bmgcc" ConfigName="Debug"/>
       <Project Name="bmt" ConfigName="Debug"/>
     </WorkspaceConfiguration>
-    <WorkspaceConfiguration Name="Release" Selected="yes">
+    <WorkspaceConfiguration Name="Release" Selected="no">
       <Project Name="bmgcc" ConfigName="Release"/>
       <Project Name="bmt" ConfigName="Release"/>
     </WorkspaceConfiguration>
