@@ -27,9 +27,9 @@ static char *name = NULL;
 static double span = 0.0;
 
 #ifdef WIN32
-static LARGE_INTEGER freq = { 0 };
-static LARGE_INTEGER time1 = { 0 };
-static LARGE_INTEGER time2 = { 0 };
+static LARGE_INTEGER freq = {{0}};
+static LARGE_INTEGER time1 = {{0}};
+static LARGE_INTEGER time2 = {{0}};
 
 #else
 static clock_t c0 = 0;
