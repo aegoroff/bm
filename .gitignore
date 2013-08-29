@@ -1,0 +1,9 @@
+/Makefile
+/bm.tags
+/bm.workspace.egr
+/bm.workspace.session
+/cppcheck.list
+/bmgcc/bmgcc.mk
+Debug/
+Release/
+/bmgcc/bmgcc.txt
