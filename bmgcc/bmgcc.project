@@ -64,7 +64,7 @@
       </Completion>
     </Configuration>
     <Configuration Name="Release" CompilerType="gnu gcc" DebuggerType="GNU gdb debugger" Type="Executable" BuildCmpWithGlobalSettings="append" BuildLnkWithGlobalSettings="append" BuildResWithGlobalSettings="append">
-      <Compiler Options="-Wall;-Ofast;-march=nocona;-mtune=nocona;-mfpmath=both;" C_Options="-Wall;-Ofast;-march=nocona;-mtune=nocona;-mfpmath=both;" Required="yes" PreCompiledHeader="" PCHInCommandLine="no" UseDifferentPCHFlags="no" PCHFlags="">
+      <Compiler Options="-Wall;-Ofast;-march=nocona;-mtune=nocona;-mfpmath=both;" C_Options="-fexpensive-optimizations;-Wall;-Ofast;-march=nocona;-mtune=nocona;-mfpmath=both" Required="yes" PreCompiledHeader="" PCHInCommandLine="no" UseDifferentPCHFlags="no" PCHFlags="">
         <IncludePath Value="."/>
         <Preprocessor Value="NO_WMAIN_SUPPORT"/>
       </Compiler>
