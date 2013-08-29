@@ -1,7 +1,7 @@
 #include "SearchTest.h"
 #include "bmsearch.h"
 
-const wchar_t* c_pStr = L"Тестовая строка";
+const wchar_t* kTestString = L"Тестовая строка";
 
 SearchTest::SearchTest(void) : pOtherShifts(NULL), nPatternLength(0), result(-10)
 {
@@ -37,22 +37,22 @@ void SearchTest::SearchTester(const wchar_t* text, const wchar_t* pattern, int s
 
 TEST_F(SearchTest, SuccessRus)
 {
-	SearchTester(c_pStr, L"ñòðîêà", 0, 9);
+	SearchTester(kTestString, L"строка", 0, 9);
 }
 
 TEST_F(SearchTest, FailRus)
 {
-	SearchTester(c_pStr, L"õðåí", 0, -1);
+	SearchTester(kTestString, L"хрен", 0, -1);
 }
 
 TEST_F(SearchTest, PatternIsTheSameAsText)
 {
-	SearchTester(c_pStr, c_pStr, 0, 0);
+	SearchTester(kTestString, kTestString, 0, 0);
 }
 
 TEST_F(SearchTest, EmptyPattern)
 {
-	SearchTester(c_pStr, L"", 0, 0);
+	SearchTester(kTestString, L"", 0, 0);
 }
 
 TEST_F(SearchTest, TwoMatches)
@@ -61,16 +61,16 @@ TEST_F(SearchTest, TwoMatches)
 	int* pOther = NULL;
 	int r = -1;
 
-	const wchar_t* pattern = L"ñò";
+	const wchar_t* pattern = L"ст";
 
 	nPatternLength = wcslen(pattern);
 
 	pOther = new int[nPatternLength];
 
 	build(pattern, nPatternLength, pOther);
-	r = search(c_pStr, wcslen(c_pStr), 0, nPatternLength, pOther);
+	r = search(kTestString, wcslen(kTestString), 0, nPatternLength, pOther);
 	EXPECT_EQ(2, r);
-	r = search(c_pStr, wcslen(c_pStr), 3, nPatternLength, pOther);
+	r = search(kTestString, wcslen(kTestString), 3, nPatternLength, pOther);
 	EXPECT_EQ(9, r);
 
 	if (pOther != NULL) {
