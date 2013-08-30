@@ -1,7 +1,6 @@
 /Makefile
 /bm.tags
 /bm.workspace.*
-/bm.workspace.*
 /cppcheck.list
 /bmgcc/bmgcc.mk
 Debug/
