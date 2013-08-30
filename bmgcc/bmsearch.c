@@ -93,9 +93,9 @@ void clean()
 	}
 }
 
-int search(const wchar_t * pText, int textLength, int startPos, int patternLength, int *pOtherShifts)
+long search(const wchar_t* pText, int textLength, int startPos, int patternLength, int* pOtherShifts)
 {
-	int pos = startPos;
+	long pos = startPos;
 	int i = 0;
 	BMHashItem *pItem = NULL;
 	int shift = 0;

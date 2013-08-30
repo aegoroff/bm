@@ -19,7 +19,7 @@ extern "C" {
 /*!
  * Searches substring position in a text
  */
-extern int search(const wchar_t * pText, int textLength, int startPos, int patternLength, int *pOtherShifts);
+extern long search(const wchar_t * pText, int textLength, int startPos, int patternLength, int *pOtherShifts);
 
 /*!
  * Builds substring shift table

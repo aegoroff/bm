@@ -91,7 +91,7 @@ int wmain(int argc, wchar_t * argv[])
 	size_t patternLength = 0;
 	int *pOtherShifts = NULL;
 	int textLength = 0;
-	int result = 0;
+	long result = 0;
 
 	setprogname("bm.exe");
 
