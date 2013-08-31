@@ -130,7 +130,6 @@ void build(const wchar_t * pattern, int patternLength, int *pOtherShifts)
 	wchar_t *suffix = NULL;
 	wchar_t *newSuffix = NULL;
 	wchar_t *tmp = NULL;
-	BOOL found = FALSE;
 	int maxShift = patternLength;
 	int ixPattern = 0;
 	int ixShift = 0;
@@ -138,7 +137,6 @@ void build(const wchar_t * pattern, int patternLength, int *pOtherShifts)
 	BOOL isStartsWith = FALSE;
 	int i = 0;
 	int ixLast = -1;
-	int nSuff = 0;
 
 	clean();
 
@@ -157,13 +155,14 @@ void build(const wchar_t * pattern, int patternLength, int *pOtherShifts)
 	}
 	// Calculating other shifts (filling each column from PatternLength - 2 to 0 (from right to left)
 	for (ixPattern = patternLength - 1; ixPattern >= 0; --ixPattern) {
+		BOOL found = FALSE;
+		int nSuff = 0;
 		if (suffix != NULL) {
 			free(suffix);
 		}
 		nSuff = patternLength - ixPattern;
 		suffix = (wchar_t *) emalloc(sizeof(wchar_t) * nSuff);
 
-		memset(suffix, 0, sizeof(wchar_t) * nSuff);
 		memcpy(suffix, pattern + ixPattern + 1, sizeof(wchar_t) * nSuff);
 
 		for (i = 0; i < nSuff - 1; ++i) {
