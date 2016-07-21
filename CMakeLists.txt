@@ -10,8 +10,8 @@ set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/lib)
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/lib)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/bin)
 
-set(CMAKE_CXX_FLAGS "-O2 -Wall -Ofast -march=nocona -mtune=nocona -mfpmath=both")
-set(CMAKE_C_FLAGS "-fexpensive-optimizations -Wall -Ofast -march=nocona -mtune=nocona -mfpmath=both")
+set(CMAKE_CXX_FLAGS "-march=corei7-avx -Wall -Ofast -mtune=corei7-avx -mfpmath=both -std=gnu++03 -save-temps -fverbose-asm")
+set(CMAKE_C_FLAGS "-march=corei7-avx -fexpensive-optimizations -Wall -Ofast -mtune=corei7-avx -mfpmath=both -std=gnu99 -save-temps -fverbose-asm")
 
 set(BMGCC bmgcc)
 set(BM_SOURCE_FILES ${BMGCC}/bm.c ${BMGCC}/bmsearch.c ${BMGCC}/eprintf.c)
