@@ -22,6 +22,8 @@
 #endif
 #include "eprintf.h"
 
+#define INT64_BITS_COUNT 64
+
 static char *name = NULL;
 
 static double span = 0.0;
@@ -104,10 +106,28 @@ void *emalloc(size_t n)
 	return p;
 }
 
+unsigned long long ilog(unsigned long long x) {
+    unsigned long long y;
+    unsigned long long n = INT64_BITS_COUNT;
+    int c = INT64_BITS_COUNT / 2;
+
+    do {
+        y = x >> c;
+        if(y != 0) {
+            n -= c;
+            x = y;
+        }
+        c >>= 1;
+    }
+    while(c != 0);
+    n -= x >> (INT64_BITS_COUNT - 1);
+    return (INT64_BITS_COUNT - 1) - (n - x);
+}
+
 FileSize NormalizeSize(unsigned long long size)
 {
 	FileSize result = { 0 };
-	result.unit = size == 0 ? SizeUnitBytes : floor(log(size) / log(BINARY_THOUSAND));
+	result.unit = size == 0 ? SizeUnitBytes : ilog(size) / ilog(BINARY_THOUSAND);
 	if (result.unit == SizeUnitBytes) {
 		result.value.sizeInBytes = size;
 	} else {
