@@ -73,8 +73,5 @@ TEST_F(SearchTest, TwoMatches)
 	r = search(kTestString, wcslen(kTestString), 3, nPatternLength, pOther);
 	EXPECT_EQ(9, r);
 
-	if (pOther != NULL) {
-
-		delete [] pOther;
-	}
+	delete [] pOther;
 }
