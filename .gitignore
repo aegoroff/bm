@@ -6,6 +6,8 @@
 /bmgcc/bmgcc.mk
 Debug/
 Release/
+bin/
+.idea/
 /bmgcc/bmgcc.txt
 /cscope_file.list
 /cscope.out
