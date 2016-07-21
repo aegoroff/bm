@@ -14,7 +14,7 @@ set(CMAKE_CXX_FLAGS "-march=corei7-avx -Wall -Ofast -mtune=corei7-avx -mfpmath=b
 set(CMAKE_C_FLAGS "-march=corei7-avx -fexpensive-optimizations -Wall -Ofast -mtune=corei7-avx -mfpmath=both -std=gnu99 -save-temps -fverbose-asm")
 
 set(BMGCC bmgcc)
-set(BM_SOURCE_FILES ${BMGCC}/bm.c ${BMGCC}/bmsearch.c ${BMGCC}/eprintf.c)
+file(GLOB BM_SOURCE_FILES "${BMGCC}/*.c")
 
 set(BMT bmt)
 set(BMT_SOURCE_FILES ${BMT}/bmt.cpp ${BMT}/SearchTest.cpp ${BMT}/gtest-all.cc ${BMGCC}/bmsearch.c ${BMGCC}/eprintf.c)
