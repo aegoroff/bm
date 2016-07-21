@@ -23,6 +23,9 @@ extern long search(const wchar_t * pText, int textLength, int startPos, int patt
 
 /*!
  * Builds substring shift table
+ * @param pattern input pattern to build
+ * @param patternLength input pattern length
+ * @param pOtherShifts result shifts
  */
 extern void build(const wchar_t * pattern, int patternLength, int *pOtherShifts);
 
