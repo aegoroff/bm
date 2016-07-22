@@ -17,6 +17,9 @@
 #endif
 
 #include <io.h>
+#ifdef _MSC_VER
+#include <sys/locking.h>
+#endif
 #include "eprintf.h"
 #include "bmsearch.h"
 
