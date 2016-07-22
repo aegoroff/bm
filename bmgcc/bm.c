@@ -22,7 +22,6 @@
 #include <share.h>
 #include <sys/stat.h>
 #include <fcntl.h>
-#include <io.h>
 #endif
 #include "eprintf.h"
 #include "bmsearch.h"
