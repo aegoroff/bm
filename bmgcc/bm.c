@@ -19,6 +19,10 @@
 #include <io.h>
 #ifdef _MSC_VER
 #include <sys/locking.h>
+#include <share.h>
+#include <sys/stat.h>
+#include <fcntl.h>
+#include <io.h>
 #endif
 #include "eprintf.h"
 #include "bmsearch.h"
