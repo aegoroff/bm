@@ -92,6 +92,9 @@ int wmain(int argc, wchar_t * argv[])
 	int *pOtherShifts = NULL;
 	int textLength = 0;
 	long result = 0;
+#ifdef _MSC_VER
+    int  fh = 0;
+#endif
 
 	setprogname("bm.exe");
 
@@ -119,9 +122,13 @@ int wmain(int argc, wchar_t * argv[])
 		goto cleanup;
 	}
 
-    fseeko(in, 0L, SEEK_END);
-    sz = ftello(in);
-    rewind(in);
+#ifdef _MSC_VER
+    _wsopen_s(&fh, path, _O_RDONLY, _SH_DENYNO, _S_IREAD | _S_IWRITE);
+    sz = _filelength(fh);
+    _close( fh );
+#else
+    sz = _filelength(in->_file);
+#endif
 
 	wprintf(L"\nFile size is: ");
 	PrintSize(sz);
