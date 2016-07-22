@@ -118,7 +118,11 @@ int wmain(int argc, wchar_t * argv[])
 		_wperror(L"");
 		goto cleanup;
 	}
-	sz = _filelength(in->_file);
+
+    fseek(in, 0L, SEEK_END);
+    sz = ftello64(in);
+    rewind(in);
+
 	wprintf(L"\nFile size is: ");
 	PrintSize(sz);
 	wprintf(L"\n");
