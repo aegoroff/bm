@@ -119,8 +119,8 @@ int wmain(int argc, wchar_t * argv[])
 		goto cleanup;
 	}
 
-    fseek(in, 0L, SEEK_END);
-    sz = ftello64(in);
+    fseeko(in, 0L, SEEK_END);
+    sz = ftello(in);
     rewind(in);
 
 	wprintf(L"\nFile size is: ");
