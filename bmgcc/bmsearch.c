@@ -42,7 +42,7 @@ static bm_hash_item_t *pattern_hash[NHASH]; /* hash table of symbols */
 * lookup: search for wchar_t; create if requested.
 * \return returns pointer if present or created; NULL if not.
 */
-bm_hash_item_t *lookup(wchar_t key, int create) {
+static bm_hash_item_t *lookup(wchar_t key, int create) {
     int h = 0;
     bm_hash_item_t *result = NULL;
 
