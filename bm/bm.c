@@ -67,11 +67,12 @@
 #define RESULT_PATTERN_BML RESULT_PATTERN_HEADL BML RESULT_PATTERN_TAILL
 #define RESULT_PATTERN_WCSL RESULT_PATTERN_HEADL WCSL RESULT_PATTERN_TAILL
 
-#define BIG_FILE_FORMAT L"%.2f %s (%llu %s)" // greater or equal 1 Kb
-#define SMALL_FILE_FORMAT L"%llu %s" // less then 1 Kb
-
 wchar_t* decode(char* from);
 
+#ifdef WIN32
+#define BIG_FILE_FORMAT L"%.2f %s (%llu %s)" // greater or equal 1 Kb
+#define SMALL_FILE_FORMAT L"%llu %s" // less then 1 Kb
+#define PRINTF wprintf
 static wchar_t* sizes[] = {
     L"bytes",
     L"Kb",
@@ -85,11 +86,29 @@ static wchar_t* sizes[] = {
     L"Bb",
     L"GPb"
 };
+#else
+#define BIG_FILE_FORMAT "%.2f %s (%llu %s)" // greater or equal 1 Kb
+#define SMALL_FILE_FORMAT "%llu %s" // less then 1 Kb
+#define PRINTF printf
+static char* sizes[] = {
+    "bytes",
+    "Kb",
+    "Mb",
+    "Gb",
+    "Tb",
+    "Pb",
+    "Eb",
+    "Zb",
+    "Yb",
+    "Bb",
+    "GPb"
+};
+#endif
 
 void print_size(unsigned long long size) {
     file_size_t normalized = normalize_size(size);
-    wprintf(normalized.unit ? BIG_FILE_FORMAT : SMALL_FILE_FORMAT,
-            normalized.value, sizes[normalized.unit], size, sizes[size_unit_bytes]);
+    PRINTF(normalized.unit ? BIG_FILE_FORMAT : SMALL_FILE_FORMAT,
+           normalized.unit ? normalized.value.size : normalized.value.size_in_bytes, sizes[normalized.unit], size, sizes[size_unit_bytes]);
 }
 
 #ifdef NO_WMAIN_SUPPORT
@@ -147,10 +166,11 @@ int wmain(int argc, wchar_t* argv[]) {
 #endif
 
     if(in == NULL) {
-        wprintf(L"\nError opening file: %s Error message: ", path);
 #ifdef WIN32
+        wprintf(L"\nError opening file: %s Error message: ", path);
         _wperror(L"");
 #else
+        printf("\nError opening file: %s Error message: ", path);
         perror("");
 #endif
         goto cleanup;
@@ -160,9 +180,15 @@ int wmain(int argc, wchar_t* argv[]) {
     sz = ftello64(in);
     fseeko64(in, 0L, SEEK_SET);
 
+#ifdef WIN32
     wprintf(L"\nFile size is: ");
     print_size(sz);
     wprintf(L"\n");
+#else
+    printf("\nFile size is: ");
+    print_size(sz);
+    printf("\n");
+#endif
 
     if(sz == 0) {
         goto cleanup;
@@ -182,10 +208,11 @@ int wmain(int argc, wchar_t* argv[]) {
 
     text_length = fread(text, sizeof(wchar_t), sz / sizeof(wchar_t), in);
     if(ferror(in)) {
-        wprintf(L"\nError reading file: %s Error message: ", path);
 #ifdef WIN32
+        wprintf(L"\nError reading file: %s Error message: ", path);
         _wperror(L"");
 #else
+        printf("\nError reading file: %s Error message: ", path);
         perror("");
 #endif
         goto cleanup;
@@ -245,19 +272,20 @@ cleanup:
 }
 
 wchar_t* decode(char* from) {
+    wchar_t* result = NULL;
 #ifdef WIN32
     int length_wide = 0;
     size_t count_chars_from = 0;
-    wchar_t* result = NULL;
-
     count_chars_from = strlen(from);
-
     length_wide = MultiByteToWideChar(CP_ACP, 0, from, count_chars_from, NULL, 0);
     result = (wchar_t *)emalloc(sizeof(wchar_t) * (length_wide + 1));
     memset(result, 0, sizeof(wchar_t) * (length_wide + 1));
     MultiByteToWideChar(CP_ACP, 0, from, count_chars_from, result, length_wide);
     return result;
 #else
-	return NULL;
+    size_t length_wide = mbstowcs(NULL, from, 0);
+    result = calloc(length_wide + 1, sizeof(wchar_t));
+    mbstowcs(result, from, length_wide + 1);
+	return result;
 #endif
 }
