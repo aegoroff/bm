@@ -1,6 +1,6 @@
 #include <stdio.h>
 
-#include "SearchTest.h"
+#include "search_test.h"
 #include "eprintf.h"
 
 TEST(normalize_size, ZeroBytes) {

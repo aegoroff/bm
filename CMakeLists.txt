@@ -27,7 +27,7 @@ file(GLOB BM_SOURCE_FILES "${BMGCC}/*.c")
 set(BMT bmt)
 set(BMT_SOURCE_FILES
     ${BMT}/bmt.cpp
-    ${BMT}/SearchTest.cpp
+    ${BMT}/search_test.cpp
     ${BMT}/gtest-all.cc
     ${BMGCC}/bmsearch.c
     ${BMGCC}/eprintf.c

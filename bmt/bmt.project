@@ -11,8 +11,8 @@
     <File Name="bmt.cpp"/>
     <File Name="gtest.h"/>
     <File Name="gtest-all.cc"/>
-    <File Name="SearchTest.cpp"/>
-    <File Name="SearchTest.h"/>
+    <File Name="search_test.cpp"/>
+    <File Name="search_test.h"/>
     <File Name="../bmgcc/bmsearch.c"/>
     <File Name="../bmgcc/eprintf.c"/>
   </VirtualDirectory>
