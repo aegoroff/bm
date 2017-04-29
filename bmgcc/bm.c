@@ -219,16 +219,16 @@ cleanup:
 wchar_t *decode(char *from)
 {
 #ifdef WIN32
-	int lengthWide = 0;
-	size_t cchFrom = 0;
+	int length_wide = 0;
+	size_t count_chars_from = 0;
 	wchar_t *result = NULL;
 
-	cchFrom = strlen(from);
+	count_chars_from = strlen(from);
 
-	lengthWide = MultiByteToWideChar(CP_ACP, 0, from, cchFrom, NULL, 0);
-	result = (wchar_t *) emalloc(sizeof(wchar_t) * (lengthWide + 1));
-	memset(result, 0, sizeof(wchar_t) * (lengthWide + 1));
-	MultiByteToWideChar(CP_ACP, 0, from, cchFrom, result, lengthWide);
+	length_wide = MultiByteToWideChar(CP_ACP, 0, from, count_chars_from, NULL, 0);
+	result = (wchar_t *) emalloc(sizeof(wchar_t) * (length_wide + 1));
+	memset(result, 0, sizeof(wchar_t) * (length_wide + 1));
+	MultiByteToWideChar(CP_ACP, 0, from, count_chars_from, result, length_wide);
 	return result;
 #else
 	return NULL;
