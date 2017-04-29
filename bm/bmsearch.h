@@ -19,8 +19,8 @@ extern "C" {
 /*!
  * Searches substring position in a text
  */
-long long search(const wchar_t *text, size_t text_length, size_t start_pos, size_t pattern_length,
-                 size_t *other_shifts);
+long long search(const wchar_t* text, size_t text_length, size_t start_pos, size_t pattern_length,
+                 size_t* other_shifts);
 
 /*!
  * Builds substring shift table
@@ -28,7 +28,7 @@ long long search(const wchar_t *text, size_t text_length, size_t start_pos, size
  * @param pattern_length input pattern length
  * @param other_shifts result shifts
  */
-void build(const wchar_t *pattern, size_t pattern_length, size_t *other_shifts);
+void build(const wchar_t* pattern, size_t pattern_length, size_t* other_shifts);
 
 /*!
  * Does necessary cleanup

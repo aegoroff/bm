@@ -58,152 +58,150 @@
 #define BIG_FILE_FORMAT L"%.2f %s (%llu %s)" // greater or equal 1 Kb
 #define SMALL_FILE_FORMAT L"%llu %s" // less then 1 Kb
 
-wchar_t *decode(char *from);
+wchar_t* decode(char* from);
 
-static wchar_t *sizes[] = {
-	L"bytes",
-	L"Kb",
-	L"Mb",
-	L"Gb",
-	L"Tb",
-	L"Pb",
-	L"Eb",
-	L"Zb",
-	L"Yb",
-	L"Bb",
-	L"GPb"
+static wchar_t* sizes[] = {
+    L"bytes",
+    L"Kb",
+    L"Mb",
+    L"Gb",
+    L"Tb",
+    L"Pb",
+    L"Eb",
+    L"Zb",
+    L"Yb",
+    L"Bb",
+    L"GPb"
 };
 
-void print_size(unsigned long long size)
-{
+void print_size(unsigned long long size) {
     file_size_t normalized = normalize_size(size);
-	wprintf(normalized.unit ? BIG_FILE_FORMAT : SMALL_FILE_FORMAT,
-	        normalized.value, sizes[normalized.unit], size, sizes[size_unit_bytes]);
+    wprintf(normalized.unit ? BIG_FILE_FORMAT : SMALL_FILE_FORMAT,
+            normalized.value, sizes[normalized.unit], size, sizes[size_unit_bytes]);
 }
 
 #ifdef NO_WMAIN_SUPPORT
 int main(int argc, char *argv[])
 {
 #else
-int wmain(int argc, wchar_t * argv[])
-{
+int wmain(int argc, wchar_t* argv[]) {
 #endif
-	FILE *in = NULL;
-	size_t sz = 0;
-	wchar_t *text = NULL;
-	wchar_t *pattern = NULL;
-	wchar_t *path = NULL;
-	wchar_t *tmp = NULL;
-	size_t pattern_length = 0;
-    size_t *other_shifts = NULL;
-	size_t text_length = 0;
-	long long result = 0;
+    FILE* in = NULL;
+    size_t sz = 0;
+    wchar_t* text = NULL;
+    wchar_t* pattern = NULL;
+    wchar_t* path = NULL;
+    wchar_t* tmp = NULL;
+    size_t pattern_length = 0;
+    size_t* other_shifts = NULL;
+    size_t text_length = 0;
+    long long result = 0;
 #ifdef _MSC_VER
-    int  fh = 0;
+    int fh = 0;
 #endif
 
-	setprogname("bm.exe");
+    setprogname("bm.exe");
 
-	if (argc != 3) {
-		printf("\nThe usage is: %s <path to file> <pattern>\n", progname());
-		return EXIT_FAILURE;
-	}
+    if(argc != 3) {
+        printf("\nThe usage is: %s <path to file> <pattern>\n", progname());
+        return EXIT_FAILURE;
+    }
 #ifdef NO_WMAIN_SUPPORT
 	path = decode(argv[1]);
 	pattern = decode(argv[2]);
 #else
-	path = argv[1];
-	pattern = argv[2];
+    path = argv[1];
+    pattern = argv[2];
 #endif
 
 #ifdef __STDC_WANT_SECURE_LIB__
-	_wfopen_s(&in, path, FILE_OPEN_MODE);
+    _wfopen_s(&in, path, FILE_OPEN_MODE);
 #else
 	in = _wfopen(path, FILE_OPEN_MODE);
 #endif
 
-	if (in == NULL) {
-		wprintf(L"\nError opening file: %s Error message: ", path);
-		_wperror(L"");
-		goto cleanup;
-	}
+    if(in == NULL) {
+        wprintf(L"\nError opening file: %s Error message: ", path);
+        _wperror(L"");
+        goto cleanup;
+    }
 
 #ifdef _MSC_VER
     _wsopen_s(&fh, path, _O_RDONLY, _SH_DENYNO, _S_IREAD | _S_IWRITE);
     sz = _filelength(fh);
-    _close( fh );
+    _close(fh);
 #else
     sz = _filelength(in->_file);
 #endif
 
-	wprintf(L"\nFile size is: ");
+    wprintf(L"\nFile size is: ");
     print_size(sz);
-	wprintf(L"\n");
+    wprintf(L"\n");
 
-	if (sz == 0) {
-		goto cleanup;
-	}
+    if(sz == 0) {
+        goto cleanup;
+    }
 
-	if (sz > MAX_SIZE) {
-		sz = MAX_SIZE;
-	} else {
-		sz -= BOM_LENGTH;   // BOM
-	}
+    if(sz > MAX_SIZE) {
+        sz = MAX_SIZE;
+    } else {
+        sz -= BOM_LENGTH; // BOM
+    }
 
-	text = (wchar_t *) emalloc(sz); // + trailing zero if necessary
-	if (text == NULL) {
-		goto cleanup;
-	}
-	memset(text, 0, sz);    // + trailing zero if necessary
+    text = (wchar_t *)emalloc(sz); // + trailing zero if necessary
+    if(text == NULL) {
+        goto cleanup;
+    }
+    memset(text, 0, sz); // + trailing zero if necessary
 
-	text_length = fread(text, sizeof(wchar_t), sz / sizeof(wchar_t), in);
-	if (ferror(in)) {
-		wprintf(L"\nError reading file: %s Error message: ", path);
-		_wperror(L"");
-		goto cleanup;
-	}
+    text_length = fread(text, sizeof(wchar_t), sz / sizeof(wchar_t), in);
+    if(ferror(in)) {
+        wprintf(L"\nError reading file: %s Error message: ", path);
+        _wperror(L"");
+        goto cleanup;
+    }
 
-	pattern_length = wcslen(pattern);
+    pattern_length = wcslen(pattern);
 
-	other_shifts = (size_t *)emalloc(sizeof(size_t) * pattern_length);
-	memset(other_shifts, 0, sizeof(size_t) * pattern_length);
+    other_shifts = (size_t *)emalloc(sizeof(size_t) * pattern_length);
+    memset(other_shifts, 0, sizeof(size_t) * pattern_length);
 
     start_timer();
 
-	build(pattern, pattern_length, other_shifts);
-	result = search(text, text_length, 0, pattern_length, other_shifts);
+    build(pattern, pattern_length, other_shifts);
+    result = search(text, text_length, 0, pattern_length, other_shifts);
 
     stop_timer();
 
 #ifdef NO_WMAIN_SUPPORT
 	printf(RESULT_PATTERN_BM, argv[0], result, read_elapsed_time());
 #else
-	wprintf(RESULT_PATTERN_BML, argv[0], result, read_elapsed_time());
+    wprintf(RESULT_PATTERN_BML, argv[0], result, read_elapsed_time());
 #endif
 
     start_timer();
 
-	tmp = wcsstr(text, pattern);
-	result = (int)(tmp - text);
+    tmp = wcsstr(text, pattern);
+    result = (int)(tmp - text);
 
     stop_timer();
 
 #ifdef NO_WMAIN_SUPPORT
 	printf(RESULT_PATTERN_WCS, argv[0], result, read_elapsed_time());
 #else
-	wprintf(RESULT_PATTERN_WCSL, argv[0], result, read_elapsed_time());
+    wprintf(RESULT_PATTERN_WCSL, argv[0], result, read_elapsed_time());
 #endif
 
 cleanup:
-	if (in != NULL) {
-		fclose(in);
-	}
-	if (text != NULL) {
-		free(text);
-	}
-	if (other_shifts != NULL && pattern_length > 0) {
-		free(other_shifts);
-	}
+    if(in != NULL) {
+        fclose(in);
+    }
+    if(text != NULL) {
+        free(text);
+    }
+    if(other_shifts != NULL && pattern_length > 0) {
+        free(other_shifts);
+    }
 #ifdef NO_WMAIN_SUPPORT
 	if (path != NULL) {
 		free(path);
@@ -212,24 +210,23 @@ cleanup:
 		free(pattern);
 	}
 #endif
-	clean();
-	return EXIT_SUCCESS;
+    clean();
+    return EXIT_SUCCESS;
 }
 
-wchar_t *decode(char *from)
-{
+wchar_t* decode(char* from) {
 #ifdef WIN32
-	int length_wide = 0;
-	size_t count_chars_from = 0;
-	wchar_t *result = NULL;
+    int length_wide = 0;
+    size_t count_chars_from = 0;
+    wchar_t* result = NULL;
 
-	count_chars_from = strlen(from);
+    count_chars_from = strlen(from);
 
-	length_wide = MultiByteToWideChar(CP_ACP, 0, from, count_chars_from, NULL, 0);
-	result = (wchar_t *) emalloc(sizeof(wchar_t) * (length_wide + 1));
-	memset(result, 0, sizeof(wchar_t) * (length_wide + 1));
-	MultiByteToWideChar(CP_ACP, 0, from, count_chars_from, result, length_wide);
-	return result;
+    length_wide = MultiByteToWideChar(CP_ACP, 0, from, count_chars_from, NULL, 0);
+    result = (wchar_t *)emalloc(sizeof(wchar_t) * (length_wide + 1));
+    memset(result, 0, sizeof(wchar_t) * (length_wide + 1));
+    MultiByteToWideChar(CP_ACP, 0, from, count_chars_from, result, length_wide);
+    return result;
 #else
 	return NULL;
 #endif

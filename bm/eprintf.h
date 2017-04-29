@@ -18,17 +18,17 @@
 extern "C" {
 #endif
 
-void eprintf(char *fmt, ...);
+void eprintf(char* fmt, ...);
 
-char *estrdup(char *s);
+char* estrdup(char* s);
 
-char *progname();
+char* progname();
 
-void setprogname(char *str);
+void setprogname(char* str);
 
-void eprintf(char *fmt, ...);
+void eprintf(char* fmt, ...);
 
-void *emalloc(size_t n);
+void* emalloc(size_t n);
 
 typedef enum {
     size_unit_bytes = 0,
@@ -46,6 +46,7 @@ typedef enum {
 
 typedef struct file_size {
     size_unit_t unit;
+
     // Union of either size in bytes or size it KBytes, MBytes etc.
     union {
         double size;

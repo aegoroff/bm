@@ -1,7 +1,7 @@
 ﻿#include "search_test.h"
 #include "bmsearch.h"
 
-const wchar_t *TEST_STRING = L"Тестовая строка";
+const wchar_t* TEST_STRING = L"Тестовая строка";
 
 search_test::search_test(void) : other_shifts(NULL) {
 }
@@ -13,13 +13,13 @@ void search_test::SetUp() {
 }
 
 void search_test::TearDown() {
-    if (other_shifts != NULL) {
+    if(other_shifts != NULL) {
         delete[] other_shifts;
     }
     clean();
 }
 
-void search_test::search_run(const wchar_t *text, const wchar_t *pattern, size_t start_pos, int expected) {
+void search_test::search_run(const wchar_t* text, const wchar_t* pattern, size_t start_pos, int expected) {
     // Arrange
     auto pattern_length = wcslen(pattern);
     other_shifts = new size_t[pattern_length];
@@ -55,7 +55,7 @@ TEST_F(search_test, search_emptypattern_zeroresult) {
 
 TEST_F(search_test, search_twomatchesinstring_twosuccessresults) {
     // Arrange
-    const wchar_t *pattern = L"ст";
+    const wchar_t* pattern = L"ст";
     size_t pattern_length = wcslen(pattern);
     other_shifts = new size_t[pattern_length];
     auto text_length = wcslen(TEST_STRING);

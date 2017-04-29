@@ -1,4 +1,4 @@
-#include <stdio.h>
+﻿#include <stdio.h>
 
 #include "search_test.h"
 #include "eprintf.h"
@@ -50,7 +50,7 @@ TEST(normalize_size, MBytes) {
 
 TEST(normalize_size, GBytes) {
     uint64_t size = BINARY_THOUSAND * BINARY_THOUSAND * BINARY_THOUSAND *
-                              (uint64_t)4;
+            (uint64_t)4;
 
     file_size_t result = normalize_size(size);
 
@@ -60,7 +60,7 @@ TEST(normalize_size, GBytes) {
 
 TEST(normalize_size, TBytes) {
     uint64_t size = (uint64_t)BINARY_THOUSAND * BINARY_THOUSAND *
-                              BINARY_THOUSAND * BINARY_THOUSAND * 2;
+            BINARY_THOUSAND * BINARY_THOUSAND * 2;
 
     file_size_t result = normalize_size(size);
 
@@ -70,7 +70,7 @@ TEST(normalize_size, TBytes) {
 
 TEST(normalize_size, PBytes) {
     uint64_t size = (uint64_t)BINARY_THOUSAND * BINARY_THOUSAND *
-                              BINARY_THOUSAND * BINARY_THOUSAND * BINARY_THOUSAND * 2;
+            BINARY_THOUSAND * BINARY_THOUSAND * BINARY_THOUSAND * 2;
 
     file_size_t result = normalize_size(size);
 
@@ -80,8 +80,8 @@ TEST(normalize_size, PBytes) {
 
 TEST(normalize_size, EBytes) {
     uint64_t size = (uint64_t)BINARY_THOUSAND * BINARY_THOUSAND *
-                              BINARY_THOUSAND * BINARY_THOUSAND * BINARY_THOUSAND *
-                              BINARY_THOUSAND * 2;
+            BINARY_THOUSAND * BINARY_THOUSAND * BINARY_THOUSAND *
+            BINARY_THOUSAND * 2;
 
     file_size_t result = normalize_size(size);
 
@@ -89,10 +89,9 @@ TEST(normalize_size, EBytes) {
     EXPECT_EQ(2.0, result.value.size);
 }
 
-int main(int argc, char **argv)
-{
-	testing::InitGoogleTest(&argc, argv);
-	// Print tests time
-	testing::GTEST_FLAG(print_time) = true;
-	return RUN_ALL_TESTS();
+int main(int argc, char** argv) {
+    testing::InitGoogleTest(&argc, argv);
+    // Print tests time
+    testing::GTEST_FLAG(print_time) = true;
+    return RUN_ALL_TESTS();
 }
