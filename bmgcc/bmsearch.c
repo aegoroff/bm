@@ -147,7 +147,7 @@ void build(const wchar_t *pattern, size_t pattern_length, size_t *other_shifts) 
         }
     }
     // Calculating other shifts (filling each column from PatternLength - 2 to 0 (from right to left)
-    for (ix_pattern = pattern_length - 1; ix_pattern >= 0; --ix_pattern) {
+    for (ix_pattern = pattern_length - 1; ix_pattern != -1; --ix_pattern) {
         BOOL found;
         size_t num_suff = 0;
         if (suffix != NULL) {
@@ -197,7 +197,7 @@ void build(const wchar_t *pattern, size_t pattern_length, size_t *other_shifts) 
                         item->shifts[ix_pattern] = max_shift;
                     } else {
                         do {    // searching last occurrence
-                            ix_last = (size_t)(tmp - new_pattern);
+                            ix_last = (size_t) (tmp - new_pattern);
                             tmp = wcsstr(new_pattern + ix_last + 1, new_suffix);
                         } while (tmp != NULL);
                         item->shifts[ix_pattern] = ix_pattern - ix_last;

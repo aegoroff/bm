@@ -74,11 +74,11 @@ static wchar_t *sizes[] = {
 	L"GPb"
 };
 
-void PrintSize(unsigned long long size)
+void print_size(unsigned long long size)
 {
-    file_size_t normalized = NormalizeSize(size);
+    file_size_t normalized = normalize_size(size);
 	wprintf(normalized.unit ? BIG_FILE_FORMAT : SMALL_FILE_FORMAT,
-	        normalized.value, sizes[normalized.unit], size, sizes[SizeUnitBytes]);
+	        normalized.value, sizes[normalized.unit], size, sizes[size_unit_bytes]);
 }
 
 #ifdef NO_WMAIN_SUPPORT
@@ -137,7 +137,7 @@ int wmain(int argc, wchar_t * argv[])
 #endif
 
 	wprintf(L"\nFile size is: ");
-	PrintSize(sz);
+    print_size(sz);
 	wprintf(L"\n");
 
 	if (sz == 0) {
@@ -168,28 +168,28 @@ int wmain(int argc, wchar_t * argv[])
 	other_shifts = (size_t *)emalloc(sizeof(size_t) * pattern_length);
 	memset(other_shifts, 0, sizeof(size_t) * pattern_length);
 
-	StartTimer();
+    start_timer();
 
 	build(pattern, pattern_length, other_shifts);
 	result = search(text, text_length, 0, pattern_length, other_shifts);
 
-	StopTimer();
+    stop_timer();
 
 #ifdef NO_WMAIN_SUPPORT
-	printf(RESULT_PATTERN_BM, argv[0], result, ReadElapsedTime());
+	printf(RESULT_PATTERN_BM, argv[0], result, read_elapsed_time());
 #else
 	wprintf(RESULT_PATTERN_BML, argv[0], result, ReadElapsedTime());
 #endif
 
-	StartTimer();
+    start_timer();
 
 	tmp = wcsstr(text, pattern);
 	result = (int)(tmp - text);
 
-	StopTimer();
+    stop_timer();
 
 #ifdef NO_WMAIN_SUPPORT
-	printf(RESULT_PATTERN_WCS, argv[0], result, ReadElapsedTime());
+	printf(RESULT_PATTERN_WCS, argv[0], result, read_elapsed_time());
 #else
 	wprintf(RESULT_PATTERN_WCSL, argv[0], result, ReadElapsedTime());
 #endif

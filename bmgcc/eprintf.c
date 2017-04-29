@@ -122,18 +122,18 @@ unsigned long long ilog(unsigned long long x) {
     return (INT64_BITS_COUNT - 1) - (n - x);
 }
 
-file_size_t NormalizeSize(unsigned long long size) {
+file_size_t normalize_size(unsigned long long size) {
     file_size_t result = {0};
-    result.unit = size == 0 ? SizeUnitBytes : ilog(size) / ilog(BINARY_THOUSAND);
-    if (result.unit == SizeUnitBytes) {
-        result.value.sizeInBytes = size;
+    result.unit = size == 0 ? size_unit_bytes : ilog(size) / ilog(BINARY_THOUSAND);
+    if (result.unit == size_unit_bytes) {
+        result.value.size_in_bytes = size;
     } else {
         result.value.size = size / pow(BINARY_THOUSAND, floor(result.unit));
     }
     return result;
 }
 
-void StartTimer(void) {
+void start_timer(void) {
 #ifdef WIN32
     QueryPerformanceFrequency(&freq);
     QueryPerformanceCounter(&time1);
@@ -142,7 +142,7 @@ void StartTimer(void) {
 #endif
 }
 
-void StopTimer(void) {
+void stop_timer(void) {
 #ifdef WIN32
     QueryPerformanceCounter(&time2);
     span = (double) (time2.QuadPart - time1.QuadPart) / (double) freq.QuadPart;
@@ -152,6 +152,6 @@ void StopTimer(void) {
 #endif
 }
 
-double ReadElapsedTime(void) {
+double read_elapsed_time(void) {
     return span;
 }

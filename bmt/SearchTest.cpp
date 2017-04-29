@@ -1,9 +1,9 @@
-#include "SearchTest.h"
+﻿#include "SearchTest.h"
 #include "bmsearch.h"
 
 const wchar_t *kTestString = L"Тестовая строка";
 
-SearchTest::SearchTest(void) : pOtherShifts(NULL), nPatternLength(0), result(-10) {
+SearchTest::SearchTest(void) : other_shifts(NULL), pattern_length(0), result(-10) {
 }
 
 SearchTest::~SearchTest(void) {
@@ -13,19 +13,19 @@ void SearchTest::SetUp() {
 }
 
 void SearchTest::TearDown() {
-    if (pOtherShifts != NULL && nPatternLength > 0) {
-        delete[] pOtherShifts;
+    if (other_shifts != NULL && pattern_length > 0) {
+        delete[] other_shifts;
     }
     clean();
 }
 
-void SearchTest::SearchTester(const wchar_t *text, const wchar_t *pattern, size_t startPos, int expected) {
-    nPatternLength = wcslen(pattern);
+void SearchTest::SearchTester(const wchar_t *text, const wchar_t *pattern, size_t start_pos, int expected) {
+    pattern_length = wcslen(pattern);
 
-    pOtherShifts = new size_t[nPatternLength];
+    other_shifts = new size_t[pattern_length];
 
-    build(pattern, nPatternLength, pOtherShifts);
-    result = search(text, wcslen(text), startPos, nPatternLength, pOtherShifts);
+    build(pattern, pattern_length, other_shifts);
+    result = search(text, wcslen(text), start_pos, pattern_length, other_shifts);
     EXPECT_EQ(expected, result);
 }
 
@@ -46,21 +46,21 @@ TEST_F(SearchTest, EmptyPattern) {
 }
 
 TEST_F(SearchTest, TwoMatches) {
-    size_t nPatternLength = 0;
-    size_t *pOther = NULL;
+    size_t pattern_length1 = 0;
+    size_t *other = NULL;
     long long r = -1;
 
     const wchar_t *pattern = L"ст";
 
-    nPatternLength = wcslen(pattern);
+    pattern_length1 = wcslen(pattern);
 
-    pOther = new size_t[nPatternLength];
+    other = new size_t[pattern_length1];
 
-    build(pattern, nPatternLength, pOther);
-    r = search(kTestString, wcslen(kTestString), 0, nPatternLength, pOther);
+    build(pattern, pattern_length1, other);
+    r = search(kTestString, wcslen(kTestString), 0, pattern_length1, other);
     EXPECT_EQ(2, r);
-    r = search(kTestString, wcslen(kTestString), 3, nPatternLength, pOther);
+    r = search(kTestString, wcslen(kTestString), 3, pattern_length1, other);
     EXPECT_EQ(9, r);
 
-    delete[] pOther;
+    delete[] other;
 }

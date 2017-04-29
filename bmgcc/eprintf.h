@@ -31,35 +31,35 @@ void eprintf(char *fmt, ...);
 void *emalloc(size_t n);
 
 typedef enum {
-    SizeUnitBytes = 0,
-    SizeUnitKBytes = 1,
-    SizeUnitMBytes = 2,
-    SizeUnitGBytes = 3,
-    SizeUnitTBytes = 4,
-    SizeUnitPBytes = 5,
-    SizeUnitEBytes = 6,
-    SizeUnitZBytes = 7,
-    SizeUnitYBytes = 8,
-    SizeUnitBBytes = 9,
-    SizeUnitGPBytes = 10
-} SizeUnit;
+    size_unit_bytes = 0,
+    size_unit_kbytes = 1,
+    size_unit_mbytes = 2,
+    size_unit_gbytes = 3,
+    size_unit_tbytes = 4,
+    size_unit_pbytes = 5,
+    size_unit_ebytes = 6,
+    size_unit_zbytes = 7,
+    size_unit_ybytes = 8,
+    size_unit_bbytes = 9,
+    size_unit_gpbytes = 10
+} size_unit_t;
 
 typedef struct file_size {
-    SizeUnit unit;
+    size_unit_t unit;
     // Union of either size in bytes or size it KBytes, MBytes etc.
     union {
         double size;
-        unsigned long long sizeInBytes;
+        unsigned long long size_in_bytes;
     } value;
 } file_size_t;
 
-file_size_t NormalizeSize(unsigned long long size);
+file_size_t normalize_size(unsigned long long size);
 
-void StartTimer(void);
+void start_timer(void);
 
-void StopTimer(void);
+void stop_timer(void);
 
-double ReadElapsedTime(void);
+double read_elapsed_time(void);
 
 #ifdef __cplusplus
 }
