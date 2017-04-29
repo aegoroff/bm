@@ -12,7 +12,6 @@
 #include <stdlib.h>
 #include <memory.h>
 #include <string.h>
-#include "eprintf.h"
 #include "bmsearch.h"
 
 #ifndef BOOL
@@ -54,7 +53,7 @@ bm_hash_item_t *lookup(wchar_t key, int create) {
         }
     }
     if (create) {
-        result = (bm_hash_item_t *) emalloc(sizeof(bm_hash_item_t));
+        result = (bm_hash_item_t *) malloc(sizeof(bm_hash_item_t));
         result->key = key;
         result->shifts = NULL;
         result->next = pattern_hash[h];
@@ -141,7 +140,7 @@ void build(const wchar_t *pattern, size_t pattern_length, size_t *other_shifts) 
         if (item->shifts != NULL) {
             continue;
         }
-        item->shifts = (size_t *) emalloc(sizeof(size_t) * pattern_length);
+        item->shifts = (size_t *) malloc(sizeof(size_t) * pattern_length);
         for (ix_shift = 0; ix_shift < pattern_length; ++ix_shift) {
             item->shifts[ix_shift] = max_shift;
         }
@@ -154,7 +153,7 @@ void build(const wchar_t *pattern, size_t pattern_length, size_t *other_shifts) 
             free(suffix);
         }
         num_suff = pattern_length - ix_pattern;
-        suffix = (wchar_t *) emalloc(sizeof(wchar_t) * num_suff);
+        suffix = (wchar_t *) malloc(sizeof(wchar_t) * num_suff);
 
         memcpy(suffix, pattern + ix_pattern + 1, sizeof(wchar_t) * num_suff);
 
@@ -188,7 +187,7 @@ void build(const wchar_t *pattern, size_t pattern_length, size_t *other_shifts) 
                         free(new_suffix);
                     }
                     // the first is key and the second id trailing zero
-                    new_suffix = (wchar_t *) emalloc(sizeof(wchar_t) * new_suffix_len);
+                    new_suffix = (wchar_t *) malloc(sizeof(wchar_t) * new_suffix_len);
                     memset(new_suffix, 0, sizeof(wchar_t) * new_suffix_len);
                     new_suffix[0] = item->key;
                     memcpy(new_suffix + 1, suffix, num_suff);
