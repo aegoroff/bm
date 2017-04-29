@@ -4,12 +4,12 @@
 /bm.tags
 /bm.workspace.*
 /cppcheck.list
-/bmgcc/bmgcc.mk
+/bm/bmgcc.mk
 Debug/
 Release/
 bin/
 .idea/
-/bmgcc/bmgcc.txt
+/bm/bmgcc.txt
 /cscope_file.list
 /cscope.out
 /bmt/bmt.mk
