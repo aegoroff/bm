@@ -1,5 +1,9 @@
 ﻿#include <stdio.h>
 
+#ifndef WIN32
+#include <stdint.h>
+#endif
+
 #include "search_test.h"
 #include "eprintf.h"
 

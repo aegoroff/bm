@@ -16,7 +16,15 @@
 #include <windows.h>
 #endif
 
+#ifdef WIN32
 #include <io.h>
+#else
+#include <sys/io.h>
+#include <wchar.h>
+#include <stdlib.h>
+#include <memory.h>
+#endif
+
 #ifdef _MSC_VER
 #include <sys/locking.h>
 #include <share.h>
@@ -37,7 +45,11 @@
 #define MAX_SIZE 200 * 1024 * 1024  // 200 megabytes
 #define BOM_LENGTH 2    // BOM length in wchar_t
 
+#ifdef WIN32
 #define FILE_OPEN_MODE L"r, ccs=UNICODE"
+#else
+#define FILE_OPEN_MODE "r, ccs=UNICODE"
+#endif
 
 #define BM "Boyer Moore"
 #define BML L"Boyer Moore"
@@ -90,7 +102,12 @@ int wmain(int argc, wchar_t* argv[]) {
     size_t sz = 0;
     wchar_t* text = NULL;
     wchar_t* pattern = NULL;
+#ifdef WIN32
     wchar_t* path = NULL;
+#else
+    char* path = NULL;
+#endif
+
     wchar_t* tmp = NULL;
     size_t pattern_length = 0;
     size_t* other_shifts = NULL;
@@ -107,32 +124,41 @@ int wmain(int argc, wchar_t* argv[]) {
         return EXIT_FAILURE;
     }
 #ifdef NO_WMAIN_SUPPORT
-	path = decode(argv[1]);
+#ifdef WIN32
+    path = decode(argv[1]);
+    pattern = decode(argv[2]);
+#else
+    path = argv[1];
 	pattern = decode(argv[2]);
+#endif
 #else
     path = argv[1];
     pattern = argv[2];
 #endif
 
+#ifdef WIN32
 #ifdef __STDC_WANT_SECURE_LIB__
     _wfopen_s(&in, path, FILE_OPEN_MODE);
 #else
-	in = _wfopen(path, FILE_OPEN_MODE);
+    in = _wfopen(path, FILE_OPEN_MODE);
+#endif
+#else
+    in = fopen(path, FILE_OPEN_MODE);
 #endif
 
     if(in == NULL) {
         wprintf(L"\nError opening file: %s Error message: ", path);
+#ifdef WIN32
         _wperror(L"");
+#else
+        perror("");
+#endif
         goto cleanup;
     }
 
-#ifdef _MSC_VER
-    _wsopen_s(&fh, path, _O_RDONLY, _SH_DENYNO, _S_IREAD | _S_IWRITE);
-    sz = _filelength(fh);
-    _close(fh);
-#else
-    sz = _filelength(in->_file);
-#endif
+    fseeko64(in, 0L, SEEK_END);
+    sz = ftello64(in);
+    fseeko64(in, 0L, SEEK_SET);
 
     wprintf(L"\nFile size is: ");
     print_size(sz);
@@ -157,7 +183,11 @@ int wmain(int argc, wchar_t* argv[]) {
     text_length = fread(text, sizeof(wchar_t), sz / sizeof(wchar_t), in);
     if(ferror(in)) {
         wprintf(L"\nError reading file: %s Error message: ", path);
+#ifdef WIN32
         _wperror(L"");
+#else
+        perror("");
+#endif
         goto cleanup;
     }
 

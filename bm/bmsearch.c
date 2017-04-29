@@ -12,6 +12,11 @@
 #include <stdlib.h>
 #include <memory.h>
 #include <string.h>
+
+#ifndef WIN32
+#include <wchar.h>
+#endif
+
 #include "bmsearch.h"
 
 #ifndef BOOL
@@ -171,7 +176,12 @@ void build(const wchar_t* pattern, size_t pattern_length, size_t* other_shifts) 
         if(new_pattern != NULL) {
             free(new_pattern);
         }
+#ifdef WIN32
         new_pattern = _wcsdup(pattern);
+#else
+        new_pattern = wcsdup(pattern);
+#endif
+
         new_pattern[pattern_length - 1] = 0;
 
         found = wcsstr(new_pattern, suffix) != NULL || num_suff == 0;

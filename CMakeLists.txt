@@ -24,8 +24,8 @@ IF("${CMAKE_CXX_COMPILER_ID}" STREQUAL "MSVC")
         set(CMAKE_STATIC_LINKER_FLAGS "${CMAKE_STATIC_LINKER_FLAGS} /LTCG")
     endif()
 ELSE()
-    set(CMAKE_CXX_FLAGS_RELEASE  "-march=corei7-avx -Wall -Ofast -mtune=corei7-avx -mfpmath=both -save-temps -fverbose-asm")
-    set(CMAKE_CXX_FLAGS_DEBUG  "-march=corei7-avx -Wall -mtune=corei7-avx -mfpmath=both -save-temps -fverbose-asm")
+    set(CMAKE_CXX_FLAGS_RELEASE  "-march=corei7-avx -Wall -Ofast -mtune=corei7-avx -mfpmath=both -save-temps -fverbose-asm -std=c++11")
+    set(CMAKE_CXX_FLAGS_DEBUG  "-march=corei7-avx -Wall -mtune=corei7-avx -mfpmath=both -save-temps -fverbose-asm -std=c++11")
 ENDIF()
 
 set(BM bm)
@@ -41,4 +41,6 @@ set(BMT_SOURCE_FILES
 )
 
 add_executable(bm ${BM_SOURCE_FILES})
-add_executable(bmt ${BMT_SOURCE_FILES})
+#add_executable(bmt ${BMT_SOURCE_FILES})
+
+target_link_libraries(bm m)

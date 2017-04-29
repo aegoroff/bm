@@ -19,10 +19,9 @@
 #include <time.h>
 
 #ifdef WIN32
-
 #include <windows.h>
-
 #endif
+
 
 #include "eprintf.h"
 
@@ -73,7 +72,7 @@ void setprogname(char* str) {
 }
 
 void eprintf(char* fmt, ...) {
-    va_list args = NULL;
+    va_list args;
     fflush(stdout);
     if(progname() != NULL) {
 #ifdef __STDC_WANT_SECURE_LIB__
