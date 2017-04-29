@@ -19,20 +19,21 @@ extern "C" {
 /*!
  * Searches substring position in a text
  */
-extern long search(const wchar_t * pText, int textLength, int startPos, int patternLength, int *pOtherShifts);
+long long search(const wchar_t *text, size_t text_length, size_t start_pos, size_t pattern_length,
+                 size_t *other_shifts);
 
 /*!
  * Builds substring shift table
  * @param pattern input pattern to build
- * @param patternLength input pattern length
- * @param pOtherShifts result shifts
+ * @param pattern_length input pattern length
+ * @param other_shifts result shifts
  */
-extern void build(const wchar_t * pattern, int patternLength, int *pOtherShifts);
+void build(const wchar_t *pattern, size_t pattern_length, size_t *other_shifts);
 
 /*!
  * Does necessary cleanup
  */
-extern void clean();
+void clean();
 
 #ifdef __cplusplus
 }

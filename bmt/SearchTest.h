@@ -11,11 +11,11 @@ class SearchTest : public testing::Test
 		virtual void SetUp();
 		virtual void TearDown();
 
-		void SearchTester(const wchar_t*, const wchar_t*, int startPos, int);
+		void SearchTester(const wchar_t *, const wchar_t *, size_t startPos, int);
 
 	private:
-		int* pOtherShifts;
-		int nPatternLength;
-		int result;
+        size_t* pOtherShifts;
+		size_t nPatternLength;
+		long long result;
 
 };

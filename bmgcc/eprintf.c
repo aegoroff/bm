@@ -17,9 +17,13 @@
 #include <math.h>
 #include <malloc.h>
 #include <time.h>
+
 #ifdef WIN32
+
 #include <windows.h>
+
 #endif
+
 #include "eprintf.h"
 
 #define INT64_BITS_COUNT 64
@@ -38,72 +42,67 @@ static clock_t c0 = 0;
 static clock_t c1 = 0;
 #endif
 
-char *estrdup(char *s)
-{
-	char *t = NULL;
-	size_t len = 0;
+char *estrdup(char *s) {
+    char *t = NULL;
+    size_t len = 0;
 
-	if (s == NULL) {
-		return t;
-	}
+    if (s == NULL) {
+        return t;
+    }
 
-	len = strlen(s) + 1;
-	t = (char *)malloc(len);
-	if (t == NULL) {
-		eprintf("estrdup(\"%.20s\") failed:", s);
-		return t;
-	}
+    len = strlen(s) + 1;
+    t = (char *) malloc(len);
+    if (t == NULL) {
+        eprintf("estrdup(\"%.20s\") failed:", s);
+        return t;
+    }
 #ifdef __STDC_WANT_SECURE_LIB__
-	strcpy_s(t, len, s);
+    strcpy_s(t, len, s);
 #else
-	strcpy(t, s);
+    strcpy(t, s);
 #endif
-	return t;
+    return t;
 }
 
-char *progname()
-{
-	return name;
+char *progname() {
+    return name;
 }
 
-void setprogname(char *str)
-{
-	name = estrdup(str);
+void setprogname(char *str) {
+    name = estrdup(str);
 }
 
-void eprintf(char *fmt, ...)
-{
-	va_list args = NULL;
-	fflush(stdout);
-	if (progname() != NULL) {
+void eprintf(char *fmt, ...) {
+    va_list args = NULL;
+    fflush(stdout);
+    if (progname() != NULL) {
 #ifdef __STDC_WANT_SECURE_LIB__
-		fprintf_s(stderr, "%s: ", progname());
+        fprintf_s(stderr, "%s: ", progname());
 #else
-		fprintf(stderr, "%s: ", progname());
+        fprintf(stderr, "%s: ", progname());
 #endif
-	}
-	va_start(args, fmt);
-	vfprintf(stderr, fmt, args);
-	va_end(args);
-	if (fmt[0] != '\0' && fmt[strlen(fmt - 1)] == ':') {
+    }
+    va_start(args, fmt);
+    vfprintf(stderr, fmt, args);
+    va_end(args);
+    if (fmt[0] != '\0' && fmt[strlen(fmt - 1)] == ':') {
 #ifdef __STDC_WANT_SECURE_LIB__
-		fprintf_s(stderr, " %s", strerror(errno));
+        fprintf_s(stderr, " %s", strerror(errno));
 #else
-		fprintf(stderr, " %s", strerror(errno));
+        fprintf(stderr, " %s", strerror(errno));
 #endif
-	}
-	fprintf(stderr, "\n");
-	exit(2);
+    }
+    fprintf(stderr, "\n");
+    exit(2);
 }
 
-void *emalloc(size_t n)
-{
-	void *p = NULL;
-	p = malloc(n);
-	if (p == NULL) {
-		eprintf("malloc of %u bytes failed:", n);
-	}
-	return p;
+void *emalloc(size_t n) {
+    void *p = NULL;
+    p = malloc(n);
+    if (p == NULL) {
+        eprintf("malloc of %u bytes failed:", n);
+    }
+    return p;
 }
 
 unsigned long long ilog(unsigned long long x) {
@@ -113,51 +112,46 @@ unsigned long long ilog(unsigned long long x) {
 
     do {
         y = x >> c;
-        if(y != 0) {
+        if (y != 0) {
             n -= c;
             x = y;
         }
         c >>= 1;
-    }
-    while(c != 0);
+    } while (c != 0);
     n -= x >> (INT64_BITS_COUNT - 1);
     return (INT64_BITS_COUNT - 1) - (n - x);
 }
 
-FileSize NormalizeSize(unsigned long long size)
-{
-	FileSize result = { 0 };
-	result.unit = size == 0 ? SizeUnitBytes : ilog(size) / ilog(BINARY_THOUSAND);
-	if (result.unit == SizeUnitBytes) {
-		result.value.sizeInBytes = size;
-	} else {
-		result.value.size = size / pow(BINARY_THOUSAND, floor(result.unit));
-	}
-	return result;
+file_size_t NormalizeSize(unsigned long long size) {
+    file_size_t result = {0};
+    result.unit = size == 0 ? SizeUnitBytes : ilog(size) / ilog(BINARY_THOUSAND);
+    if (result.unit == SizeUnitBytes) {
+        result.value.sizeInBytes = size;
+    } else {
+        result.value.size = size / pow(BINARY_THOUSAND, floor(result.unit));
+    }
+    return result;
 }
 
-void StartTimer(void)
-{
+void StartTimer(void) {
 #ifdef WIN32
-	QueryPerformanceFrequency(&freq);
-	QueryPerformanceCounter(&time1);
+    QueryPerformanceFrequency(&freq);
+    QueryPerformanceCounter(&time1);
 #else
-	c0 = clock();
+    c0 = clock();
 #endif
 }
 
-void StopTimer(void)
-{
+void StopTimer(void) {
 #ifdef WIN32
-	QueryPerformanceCounter(&time2);
-	span = (double)(time2.QuadPart - time1.QuadPart) / (double)freq.QuadPart;
+    QueryPerformanceCounter(&time2);
+    span = (double) (time2.QuadPart - time1.QuadPart) / (double) freq.QuadPart;
 #else
-	c1 = clock();
-	span = (double)(c1 - c0) / (double)CLOCKS_PER_SEC;
+    c1 = clock();
+    span = (double)(c1 - c0) / (double)CLOCKS_PER_SEC;
 #endif
 }
 
-double ReadElapsedTime(void)
-{
-	return span;
+double ReadElapsedTime(void) {
+    return span;
 }

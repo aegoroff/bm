@@ -76,7 +76,7 @@ static wchar_t *sizes[] = {
 
 void PrintSize(unsigned long long size)
 {
-	FileSize normalized = NormalizeSize(size);
+    file_size_t normalized = NormalizeSize(size);
 	wprintf(normalized.unit ? BIG_FILE_FORMAT : SMALL_FILE_FORMAT,
 	        normalized.value, sizes[normalized.unit], size, sizes[SizeUnitBytes]);
 }
@@ -94,10 +94,10 @@ int wmain(int argc, wchar_t * argv[])
 	wchar_t *pattern = NULL;
 	wchar_t *path = NULL;
 	wchar_t *tmp = NULL;
-	size_t patternLength = 0;
-	int *pOtherShifts = NULL;
-	int textLength = 0;
-	long result = 0;
+	size_t pattern_length = 0;
+    size_t *other_shifts = NULL;
+	size_t text_length = 0;
+	long long result = 0;
 #ifdef _MSC_VER
     int  fh = 0;
 #endif
@@ -156,22 +156,22 @@ int wmain(int argc, wchar_t * argv[])
 	}
 	memset(text, 0, sz);    // + trailing zero if necessary
 
-	textLength = fread(text, sizeof(wchar_t), sz / sizeof(wchar_t), in);
+	text_length = fread(text, sizeof(wchar_t), sz / sizeof(wchar_t), in);
 	if (ferror(in)) {
 		wprintf(L"\nError reading file: %s Error message: ", path);
 		_wperror(L"");
 		goto cleanup;
 	}
 
-	patternLength = wcslen(pattern);
+	pattern_length = wcslen(pattern);
 
-	pOtherShifts = (int *)emalloc(sizeof(int) * patternLength);
-	memset(pOtherShifts, 0, sizeof(int) * patternLength);
+	other_shifts = (size_t *)emalloc(sizeof(size_t) * pattern_length);
+	memset(other_shifts, 0, sizeof(size_t) * pattern_length);
 
 	StartTimer();
 
-	build(pattern, patternLength, pOtherShifts);
-	result = search(text, textLength, 0, patternLength, pOtherShifts);
+	build(pattern, pattern_length, other_shifts);
+	result = search(text, text_length, 0, pattern_length, other_shifts);
 
 	StopTimer();
 
@@ -201,14 +201,14 @@ cleanup:
 	if (text != NULL) {
 		free(text);
 	}
-	if (pOtherShifts != NULL && patternLength > 0) {
-		free(pOtherShifts);
+	if (other_shifts != NULL && pattern_length > 0) {
+		free(other_shifts);
 	}
 #ifdef NO_WMAIN_SUPPORT
 	if (path != NULL) {
 		free(path);
 	}
-	if (pattern != NULL && patternLength > 0) {
+	if (pattern != NULL && pattern_length > 0) {
 		free(pattern);
 	}
 #endif

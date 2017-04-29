@@ -18,17 +18,17 @@
 extern "C" {
 #endif
 
-extern void eprintf(char *fmt, ...);
+void eprintf(char *fmt, ...);
 
-extern char *estrdup(char *s);
+char *estrdup(char *s);
 
-extern char *progname();
+char *progname();
 
-extern void setprogname(char *str);
+void setprogname(char *str);
 
-extern void eprintf(char *fmt, ...);
+void eprintf(char *fmt, ...);
 
-extern void *emalloc(size_t n);
+void *emalloc(size_t n);
 
 typedef enum {
     SizeUnitBytes = 0,
@@ -44,20 +44,22 @@ typedef enum {
     SizeUnitGPBytes = 10
 } SizeUnit;
 
-typedef struct FileSize {
-	SizeUnit unit;
-	// Union of either size in bytes or size it KBytes, MBytes etc.
-	union {
-		double size;
-		unsigned long long sizeInBytes;
-	} value;
-} FileSize;
+typedef struct file_size {
+    SizeUnit unit;
+    // Union of either size in bytes or size it KBytes, MBytes etc.
+    union {
+        double size;
+        unsigned long long sizeInBytes;
+    } value;
+} file_size_t;
 
-extern FileSize NormalizeSize(unsigned long long size);
+file_size_t NormalizeSize(unsigned long long size);
 
-extern void StartTimer(void);
-extern void StopTimer(void);
-extern double ReadElapsedTime(void);
+void StartTimer(void);
+
+void StopTimer(void);
+
+double ReadElapsedTime(void);
 
 #ifdef __cplusplus
 }
