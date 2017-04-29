@@ -3,7 +3,7 @@
 
 const wchar_t *kTestString = L"Тестовая строка";
 
-SearchTest::SearchTest(void) : other_shifts(NULL), pattern_length(0), result(-10) {
+SearchTest::SearchTest(void) : other_shifts(NULL) {
 }
 
 SearchTest::~SearchTest(void) {
@@ -13,7 +13,7 @@ void SearchTest::SetUp() {
 }
 
 void SearchTest::TearDown() {
-    if (other_shifts != NULL && pattern_length > 0) {
+    if (other_shifts != NULL) {
         delete[] other_shifts;
     }
     clean();
@@ -21,14 +21,13 @@ void SearchTest::TearDown() {
 
 void SearchTest::SearchTester(const wchar_t *text, const wchar_t *pattern, size_t start_pos, int expected) {
     // Arrange
-    pattern_length = wcslen(pattern);
-
+    auto pattern_length = wcslen(pattern);
     other_shifts = new size_t[pattern_length];
 
     build(pattern, pattern_length, other_shifts);
 
     // Act
-    result = search(text, wcslen(text), start_pos, pattern_length, other_shifts);
+    auto result = search(text, wcslen(text), start_pos, pattern_length, other_shifts);
 
     // Assert
     EXPECT_EQ(expected, result);
@@ -36,6 +35,10 @@ void SearchTest::SearchTester(const wchar_t *text, const wchar_t *pattern, size_
 
 TEST_F(SearchTest, SuccessRus) {
     SearchTester(kTestString, L"строка", 0, 9);
+}
+
+TEST_F(SearchTest, StringStartsWithPattern) {
+    SearchTester(kTestString, L"Тестовая", 0, 0);
 }
 
 TEST_F(SearchTest, FailRus) {
@@ -53,18 +56,16 @@ TEST_F(SearchTest, EmptyPattern) {
 TEST_F(SearchTest, TwoMatches) {
     // Arrange
     const wchar_t *pattern = L"ст";
-    size_t length = wcslen(pattern);
-    size_t *shifts = new size_t[length];
+    size_t pattern_length = wcslen(pattern);
+    other_shifts = new size_t[pattern_length];
 
-    build(pattern, length, shifts);
+    build(pattern, pattern_length, other_shifts);
 
     // Act
-    long long r1 = search(kTestString, wcslen(kTestString), 0, length, shifts);
-    long long r2 = search(kTestString, wcslen(kTestString), 3, length, shifts);
+    auto r1 = search(kTestString, wcslen(kTestString), 0, pattern_length, other_shifts);
+    auto r2 = search(kTestString, wcslen(kTestString), 3, pattern_length, other_shifts);
 
     // Assert
     EXPECT_EQ(2, r1);
     EXPECT_EQ(9, r2);
-
-    delete[] shifts;
 }

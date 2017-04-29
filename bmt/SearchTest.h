@@ -12,10 +12,6 @@ class SearchTest : public testing::Test
 		virtual void TearDown();
 
 		void SearchTester(const wchar_t *, const wchar_t *, size_t start_pos, int);
-
-	private:
         size_t* other_shifts;
-		size_t pattern_length;
-		long long result;
 
 };
