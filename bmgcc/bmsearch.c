@@ -98,7 +98,7 @@ long long search(const wchar_t *text, size_t text_length, size_t start_pos, size
     }
 
     while (pos <= text_length - pattern_length) {
-        for (i = pattern_length - 1; i >= 0; --i) {
+        for (i = pattern_length - 1; i != -1; --i) {
             item = lookup(text[pos + i], FALSE);
             if (item == NULL) {
                 pos += other_shifts[i]; // shifting
