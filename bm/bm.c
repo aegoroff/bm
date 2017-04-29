@@ -217,6 +217,7 @@ int wmain(int argc, wchar_t* argv[]) {
 #endif
         goto cleanup;
     }
+    printf("\nRead %llu chars ", text_length);
 
     pattern_length = wcslen(pattern);
 
@@ -261,7 +262,9 @@ cleanup:
     }
 #ifdef NO_WMAIN_SUPPORT
 	if (path != NULL) {
-		free(path);
+#ifdef WIN32
+        free(path);
+#endif
 	}
 	if (pattern != NULL && pattern_length > 0) {
 		free(pattern);
