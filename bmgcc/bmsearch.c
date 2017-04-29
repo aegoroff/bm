@@ -36,7 +36,7 @@ typedef struct bm_hash_item {
     struct bm_hash_item *next;   /* next in hash table */
 } bm_hash_item_t;
 
-bm_hash_item_t *pattern_hash[NHASH]; /* hash table of symbols */
+static bm_hash_item_t *pattern_hash[NHASH]; /* hash table of symbols */
 
 /*!
 * lookup: search for wchar_t; create if requested.
