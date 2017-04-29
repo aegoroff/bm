@@ -1,4 +1,4 @@
-/*!
+﻿/*!
  * \brief   The file contains helper functions interface
  * \author  \verbatim
             Created by: Alexander Egorov

@@ -1,4 +1,4 @@
-/*!
+﻿/*!
  * \brief   The file contains boyer moore search function interface
  * \author  \verbatim
             Created by: Alexander Egorov

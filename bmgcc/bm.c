@@ -1,4 +1,4 @@
-/*!
+﻿/*!
  * \brief   The file contains main program implementation
  * \author  \verbatim
             Created by: Alexander Egorov
