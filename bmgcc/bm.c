@@ -178,7 +178,7 @@ int wmain(int argc, wchar_t * argv[])
 #ifdef NO_WMAIN_SUPPORT
 	printf(RESULT_PATTERN_BM, argv[0], result, read_elapsed_time());
 #else
-	wprintf(RESULT_PATTERN_BML, argv[0], result, ReadElapsedTime());
+	wprintf(RESULT_PATTERN_BML, argv[0], result, read_elapsed_time());
 #endif
 
     start_timer();
@@ -191,7 +191,7 @@ int wmain(int argc, wchar_t * argv[])
 #ifdef NO_WMAIN_SUPPORT
 	printf(RESULT_PATTERN_WCS, argv[0], result, read_elapsed_time());
 #else
-	wprintf(RESULT_PATTERN_WCSL, argv[0], result, ReadElapsedTime());
+	wprintf(RESULT_PATTERN_WCSL, argv[0], result, read_elapsed_time());
 #endif
 
 cleanup:
