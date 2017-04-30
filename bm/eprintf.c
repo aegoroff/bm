@@ -12,11 +12,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdarg.h>
-#include <string.h>
-#include <errno.h>
 #include <math.h>
-#include <malloc.h>
-#include <time.h>
 
 #ifdef WIN32
 #include <windows.h>
@@ -149,7 +145,7 @@ void stop_timer(void) {
     span = (double)(time2.QuadPart - time1.QuadPart) / (double)freq.QuadPart;
 #else
     clock_gettime(CLOCK_REALTIME, &finish);
-    span = ( finish.tv_sec - start.tv_sec ) + ( finish.tv_nsec - start.tv_nsec ) / BILLION;;
+    span = ( finish.tv_sec - start.tv_sec ) + ( finish.tv_nsec - start.tv_nsec ) / BILLION;
 #endif
 }
 
