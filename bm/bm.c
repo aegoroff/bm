@@ -12,12 +12,16 @@
 #include <stdio.h>
 
 #ifdef WIN32
+
 #include <tchar.h>
 #include <windows.h>
+
 #endif
 
 #ifdef WIN32
+
 #include <io.h>
+
 #else
 #include <sys/io.h>
 #include <wchar.h>
@@ -31,6 +35,7 @@
 #include <sys/stat.h>
 #include <fcntl.h>
 #endif
+
 #include "eprintf.h"
 #include "bmsearch.h"
 
@@ -48,7 +53,7 @@
 #ifdef WIN32
 #define FILE_OPEN_MODE L"r, ccs=UNICODE"
 #else
-#define FILE_OPEN_MODE "r, ccs=UNICODE"
+#define FILE_OPEN_MODE "r,ccs=UTF16LE"
 #endif
 
 #define BM "Boyer Moore"
@@ -73,6 +78,8 @@ wchar_t* decode(char* from);
 #define BIG_FILE_FORMAT L"%.2f %s (%llu %s)" // greater or equal 1 Kb
 #define SMALL_FILE_FORMAT L"%llu %s" // less then 1 Kb
 #define PRINTF wprintf
+#define FSEEK64 _fseeki64
+#define FTELL64 _ftelli64
 static wchar_t* sizes[] = {
     L"bytes",
     L"Kb",
@@ -90,6 +97,8 @@ static wchar_t* sizes[] = {
 #define BIG_FILE_FORMAT "%.2f %s (%llu %s)" // greater or equal 1 Kb
 #define SMALL_FILE_FORMAT "%llu %s" // less then 1 Kb
 #define PRINTF printf
+#define FSEEK64 fseeko64
+#define FTELL64 ftello64
 static char* sizes[] = {
     "bytes",
     "Kb",
@@ -108,14 +117,15 @@ static char* sizes[] = {
 void print_size(unsigned long long size) {
     file_size_t normalized = normalize_size(size);
     PRINTF(normalized.unit ? BIG_FILE_FORMAT : SMALL_FILE_FORMAT,
-           normalized.unit ? normalized.value.size : normalized.value.size_in_bytes, sizes[normalized.unit], size, sizes[size_unit_bytes]);
+           normalized.unit ? normalized.value.size : normalized.value.size_in_bytes, sizes[normalized.unit], size,
+           sizes[size_unit_bytes]);
 }
 
 #ifdef NO_WMAIN_SUPPORT
-int main(int argc, char *argv[])
-{
+
+int main(int argc, char* argv[]) {
 #else
-int wmain(int argc, wchar_t* argv[]) {
+    int wmain(int argc, wchar_t* argv[]) {
 #endif
     FILE* in = NULL;
     size_t sz = 0;
@@ -126,6 +136,8 @@ int wmain(int argc, wchar_t* argv[]) {
 #else
     char* path = NULL;
 #endif
+    wchar_t* read_result = 0;
+    const size_t line_size = 1024 * 1024;
 
     wchar_t* tmp = NULL;
     size_t pattern_length = 0;
@@ -148,7 +160,7 @@ int wmain(int argc, wchar_t* argv[]) {
     pattern = decode(argv[2]);
 #else
     path = argv[1];
-	pattern = decode(argv[2]);
+    pattern = decode(argv[2]);
 #endif
 #else
     path = argv[1];
@@ -176,9 +188,9 @@ int wmain(int argc, wchar_t* argv[]) {
         goto cleanup;
     }
 
-    fseeko64(in, 0L, SEEK_END);
-    sz = ftello64(in);
-    fseeko64(in, 0L, SEEK_SET);
+    FSEEK64(in, 0L, SEEK_END);
+    sz = FTELL64(in);
+    FSEEK64(in, 0L, SEEK_SET);
 
 #ifdef WIN32
     wprintf(L"\nFile size is: ");
@@ -200,28 +212,33 @@ int wmain(int argc, wchar_t* argv[]) {
         sz -= BOM_LENGTH; // BOM
     }
 
-    text = (wchar_t *)emalloc(sz); // + trailing zero if necessary
+    text = (wchar_t*) emalloc(sz); // + trailing zero if necessary
     if(text == NULL) {
         goto cleanup;
     }
     memset(text, 0, sz); // + trailing zero if necessary
+    do {
+        read_result = fgetws(text + text_length, line_size, in);
+        if(read_result != NULL) {
+            text_length += wcslen(read_result);
+        }
+    } while(read_result != NULL && text_length < sz / sizeof(wchar_t));
 
-    text_length = fread(text, sizeof(wchar_t), sz / sizeof(wchar_t), in);
     if(ferror(in)) {
 #ifdef WIN32
         wprintf(L"\nError reading file: %s Error message: ", path);
-        _wperror(L"");
+        _wperror(L"\n");
 #else
         printf("\nError reading file: %s Error message: ", path);
-        perror("");
+        perror("\n");
 #endif
         goto cleanup;
     }
-    printf("\nRead %llu chars ", text_length);
+    printf("\nRead %llu chars \n", text_length);
 
     pattern_length = wcslen(pattern);
 
-    other_shifts = (size_t *)emalloc(sizeof(size_t) * pattern_length);
+    other_shifts = (size_t*) emalloc(sizeof(size_t) * pattern_length);
     memset(other_shifts, 0, sizeof(size_t) * pattern_length);
 
     start_timer();
@@ -232,7 +249,7 @@ int wmain(int argc, wchar_t* argv[]) {
     stop_timer();
 
 #ifdef NO_WMAIN_SUPPORT
-	printf(RESULT_PATTERN_BM, argv[0], result, read_elapsed_time());
+    printf(RESULT_PATTERN_BM, argv[0], result, read_elapsed_time());
 #else
     wprintf(RESULT_PATTERN_BML, argv[0], result, read_elapsed_time());
 #endif
@@ -240,17 +257,17 @@ int wmain(int argc, wchar_t* argv[]) {
     start_timer();
 
     tmp = wcsstr(text, pattern);
-    result = (int)(tmp - text);
+    result = (int) (tmp - text);
 
     stop_timer();
 
 #ifdef NO_WMAIN_SUPPORT
-	printf(RESULT_PATTERN_WCS, argv[0], result, read_elapsed_time());
+    printf(RESULT_PATTERN_WCS, argv[0], result, read_elapsed_time());
 #else
     wprintf(RESULT_PATTERN_WCSL, argv[0], result, read_elapsed_time());
 #endif
 
-cleanup:
+    cleanup:
     if(in != NULL) {
         fclose(in);
     }
@@ -261,14 +278,14 @@ cleanup:
         free(other_shifts);
     }
 #ifdef NO_WMAIN_SUPPORT
-	if (path != NULL) {
+    if(path != NULL) {
 #ifdef WIN32
         free(path);
 #endif
-	}
-	if (pattern != NULL && pattern_length > 0) {
-		free(pattern);
-	}
+    }
+    if(pattern != NULL && pattern_length > 0) {
+        free(pattern);
+    }
 #endif
     clean();
     return EXIT_SUCCESS;
@@ -281,7 +298,7 @@ wchar_t* decode(char* from) {
     size_t count_chars_from = 0;
     count_chars_from = strlen(from);
     length_wide = MultiByteToWideChar(CP_ACP, 0, from, count_chars_from, NULL, 0);
-    result = (wchar_t *)emalloc(sizeof(wchar_t) * (length_wide + 1));
+    result = (wchar_t*) emalloc(sizeof(wchar_t) * (length_wide + 1));
     memset(result, 0, sizeof(wchar_t) * (length_wide + 1));
     MultiByteToWideChar(CP_ACP, 0, from, count_chars_from, result, length_wide);
     return result;
@@ -289,6 +306,6 @@ wchar_t* decode(char* from) {
     size_t length_wide = mbstowcs(NULL, from, 0);
     result = calloc(length_wide + 1, sizeof(wchar_t));
     mbstowcs(result, from, length_wide + 1);
-	return result;
+    return result;
 #endif
 }
