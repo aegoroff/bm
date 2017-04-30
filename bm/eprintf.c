@@ -37,8 +37,10 @@ static LARGE_INTEGER time1 = { { 0 } };
 static LARGE_INTEGER time2 = { { 0 } };
 
 #else
-static clock_t c0 = 0;
-static clock_t c1 = 0;
+#define BILLION 1E9
+
+static struct timespec start = { 0 };
+static struct timespec finish = { 0 };
 #endif
 
 char* estrdup(char* s) {
@@ -137,7 +139,7 @@ void start_timer(void) {
     QueryPerformanceFrequency(&freq);
     QueryPerformanceCounter(&time1);
 #else
-    c0 = clock();
+    clock_gettime(CLOCK_REALTIME, &start);
 #endif
 }
 
@@ -146,8 +148,8 @@ void stop_timer(void) {
     QueryPerformanceCounter(&time2);
     span = (double)(time2.QuadPart - time1.QuadPart) / (double)freq.QuadPart;
 #else
-    c1 = clock();
-    span = (double)(c1 - c0) / (double)CLOCKS_PER_SEC;
+    clock_gettime(CLOCK_REALTIME, &finish);
+    span = ( finish.tv_sec - start.tv_sec ) + ( finish.tv_nsec - start.tv_nsec ) / BILLION;;
 #endif
 }
 
