@@ -14,3 +14,5 @@ bin/
 /cscope.out
 /bmt/bmt.mk
 /bmt/bmt.txt
+/cmake-build-*/
+CMakeFiles/
