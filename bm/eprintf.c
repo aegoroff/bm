@@ -12,10 +12,15 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdarg.h>
+#include <string.h>
 #include <math.h>
 
 #ifdef WIN32
 #include <windows.h>
+#else
+#include <time.h>
+#include <sys/sysinfo.h>
+#include <errno.h>
 #endif
 
 

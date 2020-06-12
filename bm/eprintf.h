@@ -26,8 +26,6 @@ char* progname();
 
 void setprogname(char* str);
 
-void eprintf(char* fmt, ...);
-
 void* emalloc(size_t n);
 
 typedef enum {
