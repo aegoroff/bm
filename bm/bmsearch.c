@@ -192,13 +192,13 @@ void build(const wchar_t* pattern, size_t pattern_length, size_t* other_shifts) 
             }
             do {
                 if(found) {
-                    size_t new_suffix_len = num_suff + 1;
+                    size_t new_suffix_len = (num_suff + 1) * sizeof(wchar_t);
                     if(new_suffix != NULL) {
                         free(new_suffix);
                     }
                     // the first is key and the second id trailing zero
-                    new_suffix = (wchar_t *)malloc(sizeof(wchar_t) * new_suffix_len);
-                    memset(new_suffix, 0, sizeof(wchar_t) * new_suffix_len);
+                    new_suffix = (wchar_t *)malloc(new_suffix_len);
+                    memset(new_suffix, 0, new_suffix_len);
                     new_suffix[0] = item->key;
                     memcpy(new_suffix + 1, suffix, num_suff);
                     tmp = wcsstr(new_pattern, new_suffix);
