@@ -9,6 +9,7 @@ Debug/
 Release/
 bin/
 .idea/
+build/
 /bm/bmgcc.txt
 /cscope_file.list
 /cscope.out

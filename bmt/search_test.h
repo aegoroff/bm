@@ -1,6 +1,6 @@
 ﻿#pragma once
 
-#include "gtest.h"
+#include <gtest/gtest.h>
 
 class search_test : public testing::Test {
 public:
