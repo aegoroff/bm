@@ -97,8 +97,8 @@ static wchar_t* sizes[] = {
 #define BIG_FILE_FORMAT "%.2f %s (%llu %s)" // greater or equal 1 Kb
 #define SMALL_FILE_FORMAT "%llu %s" // less then 1 Kb
 #define PRINTF printf
-#define FSEEK64 fseeko64
-#define FTELL64 ftello64
+#define FSEEK64 fseeko
+#define FTELL64 ftello
 static char* sizes[] = {
     "bytes",
     "Kb",
